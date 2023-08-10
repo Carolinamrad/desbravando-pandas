@@ -1,0 +1,54 @@
+# %%
+import pandas as pd
+import numpy as np
+# %%
+
+df = pd.read_csv("../data/produto.csv")
+df
+# %%
+
+df.info()
+# %%
+
+# maneira 1
+df["precoAjustado"] = df["vlPreco"] * 1.09
+df["precoAjustado"] = df["precoAjustado"].round(2)
+df
+
+# maneira 2
+df["precoAjustado"] = (df["vlPreco"] * 1.09).round(2)
+df
+
+# %%
+
+df["txAjuste(%)"] = (100 * (df["precoAjustado"] / df["vlPreco"] - 1)).round(2)
+df
+# %%
+
+# deleta coluna
+df = df.drop(columns=["txAjuste"])
+# %%
+
+# np.log([2.12, 10, 2])
+
+df["logTxAjuste"] = (np.log(df["txAjuste(%)"])).round(2)
+df
+# %%
+
+df["expTxAjuste"] = (np.exp(df["txAjuste(%)"])).round(2)
+df
+
+# %%
+
+def funcao_teste(x):
+    total = 1
+    for i in range(2, int(x)+1):
+        total *= i
+    return total
+
+funcao_teste(3)
+
+# %%
+
+df["precoAjustado"].apply( funcao_teste )
+# %%
